@@ -18,7 +18,7 @@ public class CardDeliveryTest {
 
     public String setDate(int shift) {
         LocalDate localDate = LocalDate.now().plusDays(shift);
-        return DateTimeFormatter.ofPattern("dd.MM.yyyy").format(localDate);
+        return DateTimeFormatter.ofPattern("dd.MM.yyyy").toString();
     }
 
     @Test
@@ -34,8 +34,9 @@ public class CardDeliveryTest {
         $$("button").find(exactText("Запланировать")).click();
         $("[data-test-id='success-notification']").should(appear, Duration.ofSeconds(15));
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(Condition.text(date));
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно запланирована на " + date), Duration.ofSeconds(15))
+                .shouldBe(Condition.visible);
     }
 
     @Test
@@ -51,8 +52,9 @@ public class CardDeliveryTest {
         $$("button").find(exactText("Запланировать")).click();
         $("[data-test-id='success-notification']").should(appear, Duration.ofSeconds(15));
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(Condition.text(date));
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно запланирована на " + date), Duration.ofSeconds(15))
+                .shouldBe(Condition.visible);
     }
 
     @Test
@@ -68,8 +70,9 @@ public class CardDeliveryTest {
         $$("button").find(exactText("Запланировать")).click();
         $("[data-test-id='success-notification']").should(appear, Duration.ofSeconds(15));
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(Condition.text(date));
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно запланирована на " + date), Duration.ofSeconds(15))
+                .shouldBe(Condition.visible);
     }
 
     @Test
@@ -254,41 +257,5 @@ public class CardDeliveryTest {
         $$("button").find(exactText("Запланировать")).click();
         $("[data-test-id='agreement'].input_invalid");
         $("[data-test-id='success-notification']").shouldNot(appear, Duration.ofSeconds(15));
-    }
-
-    @Test
-    public void shouldPassIfPickUpDateFromCalendar() {
-        String date = setDate(3);
-        $("[data-test-id='city'] input").setValue("Казань");
-        $("[data-test-id='date'] input").doubleClick();
-        $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
-        $(".icon-button .icon").click();
-        $$(".popup .calendar__layout .calendar__row .calendar__day").find(exactText("30")).click();
-        $("[data-test-id='name'] input").setValue("Иванов Иван");
-        $("[data-test-id='phone'] input").setValue("+79990009900");
-        $("[data-test-id='agreement']").click();
-        $$("button").find(exactText("Запланировать")).click();
-        $("[data-test-id='success-notification']").should(appear, Duration.ofSeconds(15));
-        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(Condition.text("30"));
-    }
-
-    @Test
-    public void shouldPassIfPickUpCityFromList() {
-        String date = setDate(3);
-        $("[data-test-id='city'] input").setValue("Мо");
-        $$(".popup .menu .menu-item .menu-item__control").find(exactText("Москва")).click();
-        $("[data-test-id='date'] input").doubleClick();
-        $("[data-test-id='date'] input").sendKeys(Keys.DELETE);
-        $("[data-test-id='date'] input").setValue(date);
-        $("[data-test-id='name'] input").setValue("Петров Петр");
-        $("[data-test-id='phone'] input").setValue("+79990009900");
-        $("[data-test-id='agreement']").click();
-        $$("button").find(exactText("Запланировать")).click();
-        $("[data-test-id='success-notification']").should(appear, Duration.ofSeconds(15));
-        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(visible, Duration.ofSeconds(15));
-        $(withText("Встреча успешно запланирована")).shouldBe(Condition.text(date));
     }
 }

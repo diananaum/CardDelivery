@@ -18,7 +18,7 @@ public class CardDeliveryTest {
 
     public String setDate(int shift) {
         LocalDate localDate = LocalDate.now().plusDays(shift);
-        return DateTimeFormatter.ofPattern("dd.MM.yyyy").toString();
+        return DateTimeFormatter.ofPattern("dd.MM.yyyy").format(localDate);
     }
 
     @Test
